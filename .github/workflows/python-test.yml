@@ -21,10 +21,20 @@ jobs:
       - name: Run tests with pytest
         run: |
           pytest test.py --junitxml=test-results.xml
+      # 結果をアップロードする
+      - name: Upload Unit Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: Unit Test Results
+          path: test-results.xml
       # テスト結果のxmlファイルを可視化する
       # https://github.com/EnricoMi/publish-unit-test-result-action
-      - name: Publish Test Results
+      - name: Download Unit Test Results
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
-          files: test-results.xml
+          files: artifacts/*.xml
