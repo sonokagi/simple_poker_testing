@@ -2,7 +2,7 @@ name: Python unittest
 on: [pull_request]
 
 jobs:
-  test:
+  unittest:
     runs-on: windows-latest
     steps:
       - name: Checkout
