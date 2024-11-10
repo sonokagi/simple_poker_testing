@@ -27,5 +27,4 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action/windows@v2
         if: always()
         with:
-          files:
-            test-results.xml
+          files: test-results.xml
