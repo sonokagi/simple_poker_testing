@@ -1,23 +1,45 @@
 name: Python unittest
 on: [pull_request]
 
+# 必要な権限を指定
+# https://github.com/EnricoMi/publish-unit-test-result-action?tab=readme-ov-file#permissions
+permissions:
+  checks: write
+  pull-requests: write
+
 jobs:
   unittest:
     runs-on: windows-latest
     steps:
+      # コードをチェックアウト
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Python の環境をセットアップ
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       # pytest をインストール
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pytest
-      # pytest を使ってテスト実施、結果を xml ファイルに出力
-      # unittestのスクリプトは pytest と互換性があり、そのまま実行できる
+
+      # pytest を使ってテスト実施、結果を JUnit 形式で出力
+      # ※テストは unittest で記述しているが、
+      #   pytest は unitest の上位互換であり、unittest で書いたテストをそのまま実行できる
+      #   unittest は標準では JUnit 形式の出力に対応していないため、pytest を使うことにした
+      #   別案として unittest-xml-reporting を使う手もあるようだ
       - name: Run tests with pytest
         run: |
           pytest test.py --junitxml=test-results.xml
+
+      # JUnit 形式のテスト結果を可視化する。以下の GitHub Action を利用
+      # https://github.com/EnricoMi/publish-unit-test-result-action
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
+        if: always()
+        with:
+          files: test-results.xml
