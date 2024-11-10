@@ -21,3 +21,11 @@ jobs:
       - name: Run tests with pytest
         run: |
           pytest test.py --junitxml=test-results.xml
+      # テスト結果のxmlファイルを可視化する
+      # https://github.com/EnricoMi/publish-unit-test-result-action
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/windows@v2
+        if: always()
+        with:
+          files:
+            test-results.xml
