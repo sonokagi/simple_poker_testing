@@ -27,6 +27,7 @@ jobs:
       - name: Run tests with pytest
         run: |
           pytest test.py --junitxml=test-results.xml
+        continue-on-error: true
       # テスト結果のxmlファイルを可視化する
       # https://github.com/EnricoMi/publish-unit-test-result-action
       - name: Publish Unit Test Results
