@@ -9,7 +9,7 @@ class TestCard(unittest.TestCase):
         Card("♥A")
 
     def test_suit(self):
-        self.assertEqual(Card("♥A").suit, "♠")
+        self.assertEqual(Card("♥A").suit, "♥")
 
     def test_rank(self):
         self.assertEqual(Card("♥A").rank, "A")
